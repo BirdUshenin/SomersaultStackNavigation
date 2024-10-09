@@ -46,7 +46,7 @@ object ScreenRegistry {
     private val screens
     = mutableMapOf<String, @Composable (SomersaultStackNavigation) -> Unit>()
 
-    fun registerScreen(
+    fun screen(
         key: String,
         content: @Composable (SomersaultStackNavigation) -> Unit
     ) {
