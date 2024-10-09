@@ -118,7 +118,6 @@ import com.ilyaushenin.somersaultstacknavigation.ui.theme.SomersaultStackNavigat
 //    }
 //}
 
-
 class MainActivity : ComponentActivity() {
     private val viewModel by viewModels<MainScreenViewModel>()
 
@@ -139,13 +138,6 @@ fun AppContent(statesModal: StatesModal) {
     // Инициализируем навигацию один раз с помощью remember
     val stackNav = remember { statesModal.somersaultStackNavigation }
 
-    // Добавляем начальное состояние в стек, если стек пуст
-    LaunchedEffect(Unit) {
-        if (stackNav.navigationStack.isEmpty()) {
-            stackNav.onForwardFlip(MainScreen.BoxA)
-        }
-    }
-
     NavigationHandler(stackNav = stackNav)
 }
 
@@ -153,6 +145,7 @@ fun AppContent(statesModal: StatesModal) {
 fun NavigationHandler(stackNav: SomersaultStackNavigation<Any>) {
     var currentState by remember { mutableStateOf(stackNav.currentState()) }
 
+    // Обновляйте стек через LaunchedEffect
     LaunchedEffect(stackNav.navigationStack) {
         currentState = stackNav.currentState()
     }

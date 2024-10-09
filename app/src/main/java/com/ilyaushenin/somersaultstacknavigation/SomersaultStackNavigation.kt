@@ -8,8 +8,13 @@ package com.ilyaushenin.somersaultstacknavigation
 
 
 
-class SomersaultStackNavigation<T> {
+class SomersaultStackNavigation<T>(initialState: T) {
+
     val navigationStack = mutableListOf<T>()
+
+    init {
+        onForwardFlip(initialState)
+    }
 
     fun onForwardFlip(state: T) {
         navigationStack.add(state)

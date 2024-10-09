@@ -2,7 +2,7 @@ package com.ilyaushenin.somersaultstacknavigation
 
 data class StatesModal(
     val somersaultStackNavigation: SomersaultStackNavigation<Any>
-    = SomersaultStackNavigation(),
+    = SomersaultStackNavigation(MainScreen.BoxB),
 
     val x: Boolean = true
 )
@@ -23,7 +23,8 @@ sealed class MainScreen : Navigatable {
 
     data object BoxB : MainScreen() {
         override fun navigateTo(stackNav: SomersaultStackNavigation<Any>) {
-            stackNav.onBackFlip()
+//            stackNav.onBackFlip()
+            stackNav.onForwardFlip(BoxA)
         }
     }
 }
