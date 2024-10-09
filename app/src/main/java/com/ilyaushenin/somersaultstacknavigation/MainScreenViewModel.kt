@@ -8,13 +8,4 @@ class MainScreenViewModel : ViewModel() {
     private val _statesModal: MutableStateFlow<StatesModal>
     = MutableStateFlow(StatesModal())
     val statesModal = _statesModal.asStateFlow()
-
 }
-
-
-
-
-
-
-
-

@@ -75,7 +75,7 @@ fun registerScreens() {
     }
 
     ScreenRegistry.registerScreen("BoxC") { stackNav ->
-        BoxContent("This is Box C", stackNav)
+        BoxC("This is Box C", stackNav)
     }
 }
 
@@ -130,9 +130,11 @@ fun BoxB(title: String, stackNav: SomersaultStackNavigation) {
     }
 }
 
-
 @Composable
-fun BoxContent(title: String, stackNav: SomersaultStackNavigation) {
+fun BoxC(
+    title: String,
+    stackNav: SomersaultStackNavigation
+) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -142,15 +144,9 @@ fun BoxContent(title: String, stackNav: SomersaultStackNavigation) {
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(onClick = {
-            stackNav.onForwardFlip("BoxB")
+            stackNav.onForwardFlip("BoxA")
         }) {
-            Text("Перейти на Box B")
-        }
-
-        Button(onClick = {
-            stackNav.onForwardFlip("BoxC")
-        }) {
-            Text("Перейти на Box C")
+            Text("Перейти на Box A")
         }
 
         Button(onClick = {

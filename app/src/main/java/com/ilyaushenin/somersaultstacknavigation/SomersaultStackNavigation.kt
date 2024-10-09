@@ -43,7 +43,8 @@ class SomersaultStackNavigation {
 @Retention(AnnotationRetention.RUNTIME)
 annotation class NavigationScreen
 object ScreenRegistry {
-    private val screens = mutableMapOf<String, @Composable (SomersaultStackNavigation) -> Unit>()
+    private val screens
+    = mutableMapOf<String, @Composable (SomersaultStackNavigation) -> Unit>()
 
     fun registerScreen(
         key: String,
