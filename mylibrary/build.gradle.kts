@@ -49,11 +49,11 @@ dependencies {
 afterEvaluate {
     publishing {
         publications {
-            create<MavenPublication>("release") {
+            create<MavenPublication>("maven") {
                 from(components["release"])
                 groupId = "com.github.birdushenin"
                 artifactId = "somersaultstacknavigation"
-                version = "1.0.0"
+                version = "1.0.5"
             }
         }
     }
