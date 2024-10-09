@@ -5,22 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -39,13 +27,12 @@ class MainActivity : ComponentActivity() {
                 AppContent(statesModal)
             }
         }
+        registerScreens()
     }
 }
 
 @Composable
-fun AppContent(
-    statesModal: StatesModal
-) {
+fun AppContent(statesModal: StatesModal) {
     val stackNav = remember { statesModal.somersaultStackNavigation }
 
     CompositionLocalProvider(
@@ -57,131 +44,119 @@ fun AppContent(
 
 @Composable
 fun NavigationHandler() {
-
     val stackNav = SomersaultStackNavigation.LocalStackNav.current
-    var currentState by remember { mutableStateOf(stackNav.currentState()) }
-
-    LaunchedEffect(stackNav.navigationStack) {
-        currentState = stackNav.currentState()
-    }
+    val currentStack by stackNav.navigationStack.collectAsState()
 
     BackHandler(enabled = stackNav.canGoBack()) {
-        currentState = stackNav.onBackFlip()
+        stackNav.onBackFlip()
     }
 
-    when (currentState) {
-        MainScreen.BoxA -> {
-            BoxA{
-                currentState = stackNav.updateCurrentState()
-            }
+    val currentScreenKey = currentStack.lastOrNull()
+    currentScreenKey?.let { key ->
+        val screenContent = ScreenRegistry.getScreen(key)
+        if (screenContent != null) {
+            screenContent(stackNav)
+        } else {
+            Text("Unknown Screen")
         }
-
-        MainScreen.BoxB -> {
-            BoxB {
-                currentState = stackNav.updateCurrentState()
-            }
-        }
-
-        MainScreen.BoxC -> {
-            BoxC {
-                currentState = stackNav.updateCurrentState()
-            }
-        }
+    } ?: run {
+        println("No current screen to navigate to.")
     }
 }
 
-//@Composable
-//fun NavigationHandler(stackNav: SomersaultStackNavigation<String>) {
-//    val currentState = stackNav.currentState()
-//    currentState?.let { key ->
-//        ScreenRegistry.getScreen(key)?.invoke(stackNav) ?: Text("Unknown Screen")
-//    }
-//}
-//
-//
-//fun registerScreens() {
-//    ScreenRegistry.registerScreen("BoxA") { stackNav ->
-//        BoxContent("This is Box A", stackNav)
-//    }
-//
-//    ScreenRegistry.registerScreen("BoxB") { stackNav ->
-//        BoxContent("This is Box B", stackNav)
-//    }
-//
-//    ScreenRegistry.registerScreen("BoxC") { stackNav ->
-//        BoxContent("This is Box C", stackNav)
-//    }
-//}
+@NavigationScreen
+fun registerScreens() {
+    ScreenRegistry.registerScreen("BoxA") { stackNav ->
+        BoxA("This is Box A", stackNav)
+    }
 
+    ScreenRegistry.registerScreen("BoxB") { stackNav ->
+        BoxB("This is Box B", stackNav)
+    }
+
+    ScreenRegistry.registerScreen("BoxC") { stackNav ->
+        BoxContent("This is Box C", stackNav)
+    }
+}
 
 @Composable
 fun BoxA(
-    onNavigate: () -> Unit
+    title: String,
+    stackNav: SomersaultStackNavigation
 ) {
-    val stackNav = SomersaultStackNavigation.LocalStackNav.current
-
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Box A", fontSize = 24.sp)
+        Text(title, fontSize = 24.sp)
         Spacer(modifier = Modifier.height(16.dp))
+
         Button(onClick = {
-            MainScreen.BoxB.navigateTo(stackNav)
-            onNavigate()
+            stackNav.onForwardFlip("BoxB")
         }) {
             Text("Перейти на Box B")
         }
+
         Button(onClick = {
-            MainScreen.BoxC.navigateTo(stackNav)
-            onNavigate()
+            stackNav.onBackFlip()
+        }) {
+            Text("Назад")
+        }
+    }
+}
+
+@Composable
+fun BoxB(title: String, stackNav: SomersaultStackNavigation) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(title, fontSize = 24.sp)
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(onClick = {
+            stackNav.onForwardFlip("BoxC")
         }) {
             Text("Перейти на Box C")
+        }
+
+        Button(onClick = {
+            stackNav.onBackFlip()
+        }) {
+            Text("Назад")
         }
     }
 }
 
 
 @Composable
-fun BoxB(
-    onNavigate: () -> Unit
-) {
-    val stackNav = SomersaultStackNavigation.LocalStackNav.current
-
+fun BoxContent(title: String, stackNav: SomersaultStackNavigation) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Box B", fontSize = 24.sp)
+        Text(title, fontSize = 24.sp)
         Spacer(modifier = Modifier.height(16.dp))
+
         Button(onClick = {
-            MainScreen.BoxC.navigateTo(stackNav)
-            onNavigate()
+            stackNav.onForwardFlip("BoxB")
+        }) {
+            Text("Перейти на Box B")
+        }
+
+        Button(onClick = {
+            stackNav.onForwardFlip("BoxC")
         }) {
             Text("Перейти на Box C")
         }
-    }
-}
 
-@Composable
-fun BoxC(
-    onNavigate: () -> Unit
-) {
-    val stackNav = SomersaultStackNavigation.LocalStackNav.current
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text("Box B", fontSize = 24.sp)
-        Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = {
-            MainScreen.BoxB.navigateToBack(stackNav)
-            onNavigate()
+            stackNav.onBackFlip()
         }) {
-            Text("Перейти на Box A")
+            Text("Назад")
         }
     }
 }

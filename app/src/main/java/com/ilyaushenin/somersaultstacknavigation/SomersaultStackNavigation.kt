@@ -3,55 +3,58 @@ package com.ilyaushenin.somersaultstacknavigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.compositionLocalOf
 
-class SomersaultStackNavigation<T>(initialState: T) {
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
-    val navigationStack = mutableListOf<T>()
+class SomersaultStackNavigation {
+    private val _navigationStack = MutableStateFlow(listOf<String>())
+    val navigationStack: StateFlow<List<String>> get() = _navigationStack
 
     init {
-        onForwardFlip(initialState)
+        onForwardFlip("BoxA")
     }
 
-    fun onForwardFlip(state: T) {
-        navigationStack.add(state)
-        println("Navigated Forward: ${state}, Stack: $navigationStack")
+    fun onForwardFlip(state: String) {
+        _navigationStack.value += state
+        println("Navigated Forward: $state, Stack: ${_navigationStack.value}")
     }
 
-    fun onBackFlip(): T? {
-        if (navigationStack.size > 1) {
-            navigationStack.removeAt(navigationStack.size - 1)
+    fun onBackFlip(): String? {
+        if (_navigationStack.value.size > 1) {
+            _navigationStack.value = _navigationStack.value.dropLast(1)
         }
         val currentState = currentState()
-        println("Navigated Back: ${currentState?.let { it::class.simpleName }}")
+        println("Navigated Back: ${currentState ?: "None"}")
         return currentState
     }
 
-    fun currentState(): T? = navigationStack.lastOrNull()
+    private fun currentState(): String? = _navigationStack.value.lastOrNull()
 
     companion object {
-        val LocalStackNav = compositionLocalOf<SomersaultStackNavigation<Any>> {
+        val LocalStackNav = compositionLocalOf<SomersaultStackNavigation> {
             error("StackNav not provided")
         }
     }
 
-    fun updateCurrentState() = currentState()
-
-    fun canGoBack(): Boolean = navigationStack.size > 1
-
+    fun canGoBack(): Boolean = _navigationStack.value.size > 1
 }
 
-@Target(AnnotationTarget.CLASS)
+@Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class NavigationScreen
-interface Navigatable
-
 object ScreenRegistry {
-    private val screens = mutableMapOf<String, @Composable (SomersaultStackNavigation<String>) -> Unit>()
+    private val screens = mutableMapOf<String, @Composable (SomersaultStackNavigation) -> Unit>()
 
-    fun registerScreen(key: String, content: @Composable (SomersaultStackNavigation<String>) -> Unit) {
+    fun registerScreen(
+        key: String,
+        content: @Composable (SomersaultStackNavigation) -> Unit
+    ) {
         screens[key] = content
     }
 
-    fun getScreen(key: String): (@Composable (SomersaultStackNavigation<String>) -> Unit)? {
+    fun getScreen(
+        key: String
+    ): (@Composable (SomersaultStackNavigation) -> Unit)? {
         return screens[key]
     }
 }
