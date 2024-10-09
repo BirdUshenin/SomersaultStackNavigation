@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "SomersaultStackNavigation"
 include(":app")
- 
+include(":mylibrary")
