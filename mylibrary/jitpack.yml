@@ -1,2 +1,2 @@
-jitpack:
-  jdk=openjdk8:
+jdk:
+  - openjdk11
