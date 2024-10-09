@@ -71,7 +71,9 @@ fun NavigationHandler() {
 
     when (currentState) {
         MainScreen.BoxA -> {
-//            BoxA()
+            BoxA{
+                currentState = stackNav.updateCurrentState()
+            }
         }
 
         MainScreen.BoxB -> {
@@ -87,6 +89,35 @@ fun NavigationHandler() {
         }
     }
 }
+
+@Composable
+fun BoxA(
+    onNavigate: () -> Unit
+) {
+    val stackNav = SomersaultStackNavigation.LocalStackNav.current
+
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text("Box A", fontSize = 24.sp)
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(onClick = {
+            MainScreen.BoxB.navigateTo(stackNav)
+            onNavigate()
+        }) {
+            Text("Перейти на Box B")
+        }
+        Button(onClick = {
+            MainScreen.BoxC.navigateTo(stackNav)
+            onNavigate()
+        }) {
+            Text("Перейти на Box C")
+        }
+    }
+}
+
 
 @Composable
 fun BoxB(
@@ -123,7 +154,6 @@ fun BoxC(
         Text("Box B", fontSize = 24.sp)
         Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = {
-//            MainScreen.BoxA.navigateTo(stackNav)
             MainScreen.BoxB.navigateToBack(stackNav)
             onNavigate()
         }) {
