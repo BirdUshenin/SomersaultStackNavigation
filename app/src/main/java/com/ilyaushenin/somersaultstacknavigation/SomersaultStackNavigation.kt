@@ -1,12 +1,6 @@
 package com.ilyaushenin.somersaultstacknavigation
 
-//class SomersaultStackNavigation {
-//
-//    fun onBackFlip() { }
-//    fun onForwardFlip() { }
-//}
-
-
+import androidx.compose.runtime.compositionLocalOf
 
 class SomersaultStackNavigation<T>(initialState: T) {
 
@@ -31,6 +25,15 @@ class SomersaultStackNavigation<T>(initialState: T) {
     }
 
     fun currentState(): T? = navigationStack.lastOrNull()
+
+    companion object {
+        val LocalStackNav = compositionLocalOf<SomersaultStackNavigation<Any>> {
+            error("StackNav not provided")
+        }
+    }
+
+    fun updateCurrentState() = currentState()
+
 }
 
 @Target(AnnotationTarget.CLASS)
@@ -38,6 +41,5 @@ class SomersaultStackNavigation<T>(initialState: T) {
 annotation class NavigationScreen
 interface Navigatable {
     fun navigateTo(stackNav: SomersaultStackNavigation<Any>)
+    fun navigateToBack(stackNav: SomersaultStackNavigation<Any>)
 }
-
-
