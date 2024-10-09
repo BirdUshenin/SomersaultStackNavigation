@@ -58,3 +58,6 @@ afterEvaluate {
         }
     }
 }
+tasks.named("publishToMavenLocal") {
+    dependsOn(tasks.named("publishReleasePublicationToMavenLocal"))
+}
