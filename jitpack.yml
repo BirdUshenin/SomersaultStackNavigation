@@ -1,4 +1,3 @@
-jdk: openjdk8
-before_install:
-- sdkmanager "platforms;android-34"
-- sdkmanager "build-tools;34.0.0"
+jdk:
+  - openjdk11
+
