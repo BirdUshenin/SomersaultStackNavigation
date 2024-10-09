@@ -25,6 +25,100 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ilyaushenin.somersaultstacknavigation.ui.theme.SomersaultStackNavigationTheme
 
+//class MainActivity : ComponentActivity() {
+//    private val viewModel by viewModels<MainScreenViewModel>()
+//
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        setContent {
+//            val statesModal by viewModel.statesModal.collectAsState()
+//
+//            SomersaultStackNavigationTheme {
+//                AppContent()
+//            }
+//        }
+//    }
+//}
+//
+//@Composable
+//fun AppContent() {
+//    // Инициализируем навигацию
+//    val stackNav = remember { SomersaultStackNavigation<Any>() }
+//    // Добавляем начальное состояние в стек (Box A)
+//    stackNav.onForwardFlip(MainScreens.BoxAState())
+//
+//    // Обрабатываем навигацию
+//    NavigationHandler(stackNav = stackNav)
+//}
+//
+//@Composable
+//fun NavigationHandler(stackNav: SomersaultStackNavigation<Any>) {
+//    // Следим за текущим состоянием стека с помощью remember и mutableStateOf
+//    var currentState by remember { mutableStateOf(stackNav.currentState()) }
+//
+//    // Обновляем состояние UI при изменении стека
+//    LaunchedEffect(stackNav) {
+//        currentState = stackNav.currentState()
+//    }
+//
+//    // Перехватываем нажатие кнопки "назад"
+//    BackHandler(enabled = stackNav.navigationStack.size > 1) {
+//        stackNav.onBackFlip()
+//        currentState = stackNav.currentState() // Обновляем текущее состояние
+//    }
+//
+//    // В зависимости от состояния, показываем нужный экран
+//    when (currentState) {
+//        is MainScreens.BoxAState -> {
+//            BoxA {
+//                // Переходим на Box B через onForwardFlip и обновляем состояние
+//                stackNav.onForwardFlip(MainScreens.BoxBState())
+//                currentState = stackNav.currentState() // Обновляем текущее состояние
+//            }
+//        }
+//        is MainScreens.BoxBState -> {
+//            BoxB {
+//                // Возвращаемся на Box A через onBackFlip и обновляем состояние
+//                stackNav.onBackFlip()
+//                currentState = stackNav.currentState() // Обновляем текущее состояние
+//            }
+//        }
+//    }
+//}
+//
+//@Composable
+//fun BoxA(onNavigate: () -> Unit) {
+//    // Box A
+//    Column(
+//        modifier = Modifier.fillMaxSize(),
+//        verticalArrangement = Arrangement.Center,
+//        horizontalAlignment = Alignment.CenterHorizontally
+//    ) {
+//        Text("Box A", fontSize = 24.sp)
+//        Spacer(modifier = Modifier.height(16.dp))
+//        Button(onClick = { onNavigate() }) {
+//            Text("Перейти на Box B")
+//        }
+//    }
+//}
+//
+//@Composable
+//fun BoxB(onBack: () -> Unit) {
+//    // Box B
+//    Column(
+//        modifier = Modifier.fillMaxSize(),
+//        verticalArrangement = Arrangement.Center,
+//        horizontalAlignment = Alignment.CenterHorizontally
+//    ) {
+//        Text("Box B", fontSize = 24.sp)
+//        Spacer(modifier = Modifier.height(16.dp))
+//        Button(onClick = { onBack() }) {
+//            Text("Назад на Box A")
+//        }
+//    }
+//}
+
+
 class MainActivity : ComponentActivity() {
     private val viewModel by viewModels<MainScreenViewModel>()
 
@@ -34,18 +128,23 @@ class MainActivity : ComponentActivity() {
             val statesModal by viewModel.statesModal.collectAsState()
 
             SomersaultStackNavigationTheme {
-                AppContent()
+                AppContent(statesModal)
             }
         }
     }
 }
 
 @Composable
-fun AppContent() {
-    // Инициализируем навигацию
-    val stackNav = remember { SomersaultStackNavigation<Any>() }
-    // Добавляем начальное состояние в стек (Box A)
-    stackNav.onForwardFlip(MainScreens.BoxAState())
+fun AppContent(statesModal: StatesModal) {
+    // Инициализируем навигацию один раз с помощью remember
+    val stackNav = remember { statesModal.somersaultStackNavigation }
+
+    // Добавляем начальное состояние в стек, если стек пуст
+    LaunchedEffect(Unit) {
+        if (stackNav.navigationStack.isEmpty()) {
+            stackNav.onForwardFlip(MainScreens.BoxAState())
+        }
+    }
 
     // Обрабатываем навигацию
     NavigationHandler(stackNav = stackNav)
@@ -54,33 +153,33 @@ fun AppContent() {
 @Composable
 fun NavigationHandler(stackNav: SomersaultStackNavigation<Any>) {
     // Следим за текущим состоянием стека с помощью remember и mutableStateOf
-    var currentState by remember { mutableStateOf(stackNav.currentState()) }
+    val currentState = remember { mutableStateOf(stackNav.currentState()) }
 
     // Обновляем состояние UI при изменении стека
-    LaunchedEffect(stackNav) {
-        currentState = stackNav.currentState()
+    LaunchedEffect(stackNav.navigationStack) {
+        currentState.value = stackNav.currentState()
     }
 
     // Перехватываем нажатие кнопки "назад"
     BackHandler(enabled = stackNav.navigationStack.size > 1) {
         stackNav.onBackFlip()
-        currentState = stackNav.currentState() // Обновляем текущее состояние
+        currentState.value = stackNav.currentState() // Обновляем текущее состояние
     }
 
     // В зависимости от состояния, показываем нужный экран
-    when (currentState) {
+    when (currentState.value) {
         is MainScreens.BoxAState -> {
             BoxA {
-                // Переходим на Box B через onForwardFlip и обновляем состояние
+                // Переходим на Box B через onForwardFlip
                 stackNav.onForwardFlip(MainScreens.BoxBState())
-                currentState = stackNav.currentState() // Обновляем текущее состояние
+                currentState.value = stackNav.currentState()
             }
         }
         is MainScreens.BoxBState -> {
             BoxB {
-                // Возвращаемся на Box A через onBackFlip и обновляем состояние
+                // Возвращаемся на Box A через onBackFlip
                 stackNav.onBackFlip()
-                currentState = stackNav.currentState() // Обновляем текущее состояние
+                currentState.value = stackNav.currentState()
             }
         }
     }
@@ -88,7 +187,6 @@ fun NavigationHandler(stackNav: SomersaultStackNavigation<Any>) {
 
 @Composable
 fun BoxA(onNavigate: () -> Unit) {
-    // Box A
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -96,7 +194,7 @@ fun BoxA(onNavigate: () -> Unit) {
     ) {
         Text("Box A", fontSize = 24.sp)
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = { onNavigate() }) {
+        Button(onClick = onNavigate) {
             Text("Перейти на Box B")
         }
     }
@@ -104,7 +202,6 @@ fun BoxA(onNavigate: () -> Unit) {
 
 @Composable
 fun BoxB(onBack: () -> Unit) {
-    // Box B
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -112,7 +209,7 @@ fun BoxB(onBack: () -> Unit) {
     ) {
         Text("Box B", fontSize = 24.sp)
         Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = { onBack() }) {
+        Button(onClick = onBack) {
             Text("Назад на Box A")
         }
     }
