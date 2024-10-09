@@ -7,11 +7,26 @@ data class StatesModal(
     val x: Boolean = true
 )
 
-sealed class MainScreen {
-    data object BoxA : MainScreen()
-    data object BoxB : MainScreen()
-}
+//@NavigationScreen
+//sealed class MainScreen {
+//    data object BoxA : MainScreen()
+//    data object BoxB : MainScreen()
+//}
 
+@NavigationScreen
+sealed class MainScreen : Navigatable {
+    data object BoxA : MainScreen() {
+        override fun navigateTo(stackNav: SomersaultStackNavigation<Any>) {
+            stackNav.onForwardFlip(BoxB)
+        }
+    }
+
+    data object BoxB : MainScreen() {
+        override fun navigateTo(stackNav: SomersaultStackNavigation<Any>) {
+            stackNav.onBackFlip()
+        }
+    }
+}
 
 
 //data class ScreenState(

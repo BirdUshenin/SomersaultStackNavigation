@@ -146,40 +146,35 @@ fun AppContent(statesModal: StatesModal) {
         }
     }
 
-    // Обрабатываем навигацию
     NavigationHandler(stackNav = stackNav)
 }
 
 @Composable
 fun NavigationHandler(stackNav: SomersaultStackNavigation<Any>) {
-    // Следим за текущим состоянием стека
     var currentState by remember { mutableStateOf(stackNav.currentState()) }
 
-    // Обновляем состояние UI при изменении стека
     LaunchedEffect(stackNav.navigationStack) {
         currentState = stackNav.currentState()
     }
 
-    // Перехватываем нажатие кнопки "назад"
     BackHandler(enabled = stackNav.navigationStack.size > 1) {
         stackNav.onBackFlip()
-        currentState = stackNav.currentState() // Обновляем текущее состояние
+        currentState = stackNav.currentState()
     }
 
-    // В зависимости от состояния, показываем нужный экран
     when (currentState) {
         MainScreen.BoxA -> {
             BoxA {
-                // Переходим на Box B через onForwardFlip и обновляем состояние
-                stackNav.onForwardFlip(MainScreen.BoxB)
-                currentState = stackNav.currentState() // Обновляем текущее состояние
+                // Инициализация БоксА в стеке
+                MainScreen.BoxA.navigateTo(stackNav)
+                currentState = stackNav.currentState()
             }
         }
         MainScreen.BoxB -> {
             BoxB {
-                // Возвращаемся на Box A через onBackFlip и обновляем состояние
-                stackNav.onBackFlip()
-                currentState = stackNav.currentState() // Обновляем текущее состояние
+                // Инициализация БоксБ в стеке
+                MainScreen.BoxB.navigateTo(stackNav)
+                currentState = stackNav.currentState()
             }
         }
     }

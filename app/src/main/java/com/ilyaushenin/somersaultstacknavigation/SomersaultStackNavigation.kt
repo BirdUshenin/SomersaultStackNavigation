@@ -6,6 +6,8 @@ package com.ilyaushenin.somersaultstacknavigation
 //    fun onForwardFlip() { }
 //}
 
+
+
 class SomersaultStackNavigation<T> {
     val navigationStack = mutableListOf<T>()
 
@@ -25,3 +27,12 @@ class SomersaultStackNavigation<T> {
 
     fun currentState(): T? = navigationStack.lastOrNull()
 }
+
+@Target(AnnotationTarget.CLASS)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class NavigationScreen
+interface Navigatable {
+    fun navigateTo(stackNav: SomersaultStackNavigation<Any>)
+}
+
+
