@@ -7,9 +7,9 @@ data class StatesModal(
     val x: Boolean = true
 )
 
-object MainScreens {
-    class BoxAState
-    class BoxBState
+sealed class MainScreen {
+    data object BoxA : MainScreen()
+    data object BoxB : MainScreen()
 }
 
 

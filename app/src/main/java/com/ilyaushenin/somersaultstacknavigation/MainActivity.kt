@@ -142,7 +142,7 @@ fun AppContent(statesModal: StatesModal) {
     // Добавляем начальное состояние в стек, если стек пуст
     LaunchedEffect(Unit) {
         if (stackNav.navigationStack.isEmpty()) {
-            stackNav.onForwardFlip(MainScreens.BoxAState())
+            stackNav.onForwardFlip(MainScreen.BoxA)
         }
     }
 
@@ -152,34 +152,34 @@ fun AppContent(statesModal: StatesModal) {
 
 @Composable
 fun NavigationHandler(stackNav: SomersaultStackNavigation<Any>) {
-    // Следим за текущим состоянием стека с помощью remember и mutableStateOf
-    val currentState = remember { mutableStateOf(stackNav.currentState()) }
+    // Следим за текущим состоянием стека
+    var currentState by remember { mutableStateOf(stackNav.currentState()) }
 
     // Обновляем состояние UI при изменении стека
     LaunchedEffect(stackNav.navigationStack) {
-        currentState.value = stackNav.currentState()
+        currentState = stackNav.currentState()
     }
 
     // Перехватываем нажатие кнопки "назад"
     BackHandler(enabled = stackNav.navigationStack.size > 1) {
         stackNav.onBackFlip()
-        currentState.value = stackNav.currentState() // Обновляем текущее состояние
+        currentState = stackNav.currentState() // Обновляем текущее состояние
     }
 
     // В зависимости от состояния, показываем нужный экран
-    when (currentState.value) {
-        is MainScreens.BoxAState -> {
+    when (currentState) {
+        MainScreen.BoxA -> {
             BoxA {
-                // Переходим на Box B через onForwardFlip
-                stackNav.onForwardFlip(MainScreens.BoxBState())
-                currentState.value = stackNav.currentState()
+                // Переходим на Box B через onForwardFlip и обновляем состояние
+                stackNav.onForwardFlip(MainScreen.BoxB)
+                currentState = stackNav.currentState() // Обновляем текущее состояние
             }
         }
-        is MainScreens.BoxBState -> {
+        MainScreen.BoxB -> {
             BoxB {
-                // Возвращаемся на Box A через onBackFlip
+                // Возвращаемся на Box A через onBackFlip и обновляем состояние
                 stackNav.onBackFlip()
-                currentState.value = stackNav.currentState()
+                currentState = stackNav.currentState() // Обновляем текущее состояние
             }
         }
     }
