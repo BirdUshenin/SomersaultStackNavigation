@@ -1,5 +1,6 @@
 package com.ilyaushenin.somersaultstacknavigation
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.compositionLocalOf
 
 class SomersaultStackNavigation<T>(initialState: T) {
@@ -34,12 +35,23 @@ class SomersaultStackNavigation<T>(initialState: T) {
 
     fun updateCurrentState() = currentState()
 
+    fun canGoBack(): Boolean = navigationStack.size > 1
+
 }
 
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class NavigationScreen
-interface Navigatable {
-    fun navigateTo(stackNav: SomersaultStackNavigation<Any>)
-    fun navigateToBack(stackNav: SomersaultStackNavigation<Any>)
+interface Navigatable
+
+object ScreenRegistry {
+    private val screens = mutableMapOf<String, @Composable (SomersaultStackNavigation<String>) -> Unit>()
+
+    fun registerScreen(key: String, content: @Composable (SomersaultStackNavigation<String>) -> Unit) {
+        screens[key] = content
+    }
+
+    fun getScreen(key: String): (@Composable (SomersaultStackNavigation<String>) -> Unit)? {
+        return screens[key]
+    }
 }

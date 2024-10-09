@@ -65,7 +65,7 @@ fun NavigationHandler() {
         currentState = stackNav.currentState()
     }
 
-    BackHandler(enabled = stackNav.navigationStack.size > 1) {
+    BackHandler(enabled = stackNav.canGoBack()) {
         currentState = stackNav.onBackFlip()
     }
 
@@ -89,6 +89,30 @@ fun NavigationHandler() {
         }
     }
 }
+
+//@Composable
+//fun NavigationHandler(stackNav: SomersaultStackNavigation<String>) {
+//    val currentState = stackNav.currentState()
+//    currentState?.let { key ->
+//        ScreenRegistry.getScreen(key)?.invoke(stackNav) ?: Text("Unknown Screen")
+//    }
+//}
+//
+//
+//fun registerScreens() {
+//    ScreenRegistry.registerScreen("BoxA") { stackNav ->
+//        BoxContent("This is Box A", stackNav)
+//    }
+//
+//    ScreenRegistry.registerScreen("BoxB") { stackNav ->
+//        BoxContent("This is Box B", stackNav)
+//    }
+//
+//    ScreenRegistry.registerScreen("BoxC") { stackNav ->
+//        BoxContent("This is Box C", stackNav)
+//    }
+//}
+
 
 @Composable
 fun BoxA(
