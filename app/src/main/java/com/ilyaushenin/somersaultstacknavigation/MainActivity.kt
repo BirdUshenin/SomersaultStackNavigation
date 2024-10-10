@@ -13,6 +13,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+//import com.ilyaushenin.somersault.NavigationScreen
+
+
 import com.ilyaushenin.somersaultstacknavigation.ui.theme.SomersaultStackNavigationTheme
 
 class MainActivity : ComponentActivity() {
@@ -20,6 +23,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             val statesModal by viewModel.statesModal.collectAsState()
 

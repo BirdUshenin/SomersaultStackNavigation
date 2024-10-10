@@ -75,9 +75,7 @@ object ScreenRegistry {
         screens[key] = content
     }
 
-    fun getScreen(
-        key: String
-    ): (@Composable (SomersaultStackNavigation) -> Unit)? {
-        return screens[key]
+    fun getScreen(key: String): (@Composable (SomersaultStackNavigation) -> Unit)? {
+        return screens[key] as? (@Composable (SomersaultStackNavigation) -> Unit)
     }
 }
