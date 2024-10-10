@@ -13,13 +13,13 @@
         android:theme="@style/Theme.SomersaultStackNavigation"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".SampleActivity"
             android:exported="true"
             android:theme="@style/Theme.SomersaultStackNavigation">
         </activity>
 
         <activity
-            android:name=".WelcomeActivity"
+            android:name=".welcome.WelcomeActivity"
             android:exported="true"
             android:theme="@style/Theme.SomersaultStackNavigation">
             <intent-filter>
