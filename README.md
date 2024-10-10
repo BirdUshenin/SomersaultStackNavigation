@@ -24,7 +24,6 @@ This library is for using small graphs inside compose functions, it is compatibl
 ```
  dependencies {
      implementation 'com.github.BirdUshenin:SomersaultStackNavigation:3.0.1'
-	}
  }    
 ```
 
