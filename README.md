@@ -1,5 +1,5 @@
 
-# This is SomersaultStackNavigation
+# This is SomersaultStackNavigation 🏃
 
 This library is for using small graphs inside compose functions, it is compatible with the concept of UDF architecture
 
