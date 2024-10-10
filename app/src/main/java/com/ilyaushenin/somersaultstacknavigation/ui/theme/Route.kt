@@ -1,10 +1,10 @@
 package com.ilyaushenin.somersaultstacknavigation.ui.theme
 
 import androidx.compose.runtime.Composable
-import com.ilyaushenin.somersault.NavigationScreens
+import com.ilyaushenin.somersault.NavigationRoute
 import com.ilyaushenin.somersault.SomersaultStackNavigation
 
-@NavigationScreens
+@NavigationRoute
 object ScreenRegistry {
     private val screens = mutableMapOf<String, @Composable (SomersaultStackNavigation) -> Unit>()
 

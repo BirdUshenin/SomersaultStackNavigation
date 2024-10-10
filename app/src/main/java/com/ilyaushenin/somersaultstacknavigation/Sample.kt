@@ -7,7 +7,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import com.ilyaushenin.somersault.NavigationScreens
+import com.ilyaushenin.somersault.NavigationScreensGraph
 import com.ilyaushenin.somersault.SomersaultStackNavigation
 import com.ilyaushenin.somersaultstacknavigation.ui.theme.ScreenRegistry
 
@@ -63,7 +63,7 @@ fun NavigationHandler() {
 /***
  * This is Compose Navigation Graph
  ***/
-@NavigationScreens
+@NavigationScreensGraph
 fun registerScreens() {
     val screens: List<Pair<String, @Composable (SomersaultStackNavigation) -> Unit>> = listOf(
         "BoxA" to { stackNav -> BoxA("This is Box A", stackNav) },
