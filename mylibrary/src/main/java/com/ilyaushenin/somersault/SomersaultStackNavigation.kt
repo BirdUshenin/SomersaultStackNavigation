@@ -1,6 +1,5 @@
 package com.ilyaushenin.somersault
 
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.compositionLocalOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -33,8 +32,7 @@ class SomersaultStackNavigation(initialState: String) {
         if (_navigationStack.value.size > 1) {
             _navigationStack.value = _navigationStack.value.dropLast(1)
         }
-        val currentState = currentState()
-        return currentState
+        return currentState()
     }
 
     /***
@@ -64,18 +62,17 @@ class SomersaultStackNavigation(initialState: String) {
 @Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class NavigationScreens
+/***
+ * Implement methods to store the state of screens, as well as their list.
 object ScreenRegistry {
-    private val screens
-            = mutableMapOf<String, @Composable (SomersaultStackNavigation) -> Unit>()
+private val screens = mutableMapOf<String, @Composable (SomersaultStackNavigation) -> Unit>()
 
-    fun screen(
-        key: String,
-        content: @Composable (SomersaultStackNavigation) -> Unit
-    ) {
-        screens[key] = content
-    }
-
-    fun getScreen(key: String): (@Composable (SomersaultStackNavigation) -> Unit)? {
-        return screens[key] as? (@Composable (SomersaultStackNavigation) -> Unit)
-    }
+fun screen(key: String, content: @Composable (SomersaultStackNavigation) -> Unit) {
+screens[key] = content
 }
+
+fun getScreen(key: String): (@Composable (SomersaultStackNavigation) -> Unit)? {
+return screens[key]
+}
+}
+ ***/

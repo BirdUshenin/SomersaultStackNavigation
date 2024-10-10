@@ -13,9 +13,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-//import com.ilyaushenin.somersault.NavigationScreen
-
-
+import com.ilyaushenin.somersault.SomersaultStackNavigation
+import com.ilyaushenin.somersaultstacknavigation.ui.theme.ScreenRegistry
 import com.ilyaushenin.somersaultstacknavigation.ui.theme.SomersaultStackNavigationTheme
 
 class MainActivity : ComponentActivity() {
@@ -58,36 +57,26 @@ fun NavigationHandler() {
     val currentScreenKey = currentStack.lastOrNull()
     currentScreenKey?.let { key ->
         val screenContent = ScreenRegistry.getScreen(key)
-        if (screenContent != null) {
-            screenContent(stackNav)
-        } else {
-            Text("Unknown Screen")
-        }
+        screenContent?.invoke(stackNav) ?: Text("Ошибка: Экран не найден.")
     } ?: run {
-        println("No current screen to navigate to.")
+        Text("Нет текущего экрана для отображения.")
     }
 }
 
-@NavigationScreens
 fun registerScreens() {
-    ScreenRegistry.screen("BoxA") { stackNav ->
-        BoxA("This is Box A", stackNav)
-    }
+    val screens: List<Pair<String, @Composable (SomersaultStackNavigation) -> Unit>> = listOf(
+        "BoxA" to { stackNav -> BoxA("This is Box A", stackNav) },
+        "BoxB" to { stackNav -> BoxB("This is Box B", stackNav) },
+        "BoxC" to { stackNav -> BoxC("This is Box C", stackNav) }
+    )
 
-    ScreenRegistry.screen("BoxB") { stackNav ->
-        BoxB("This is Box B", stackNav)
-    }
-
-    ScreenRegistry.screen("BoxC") { stackNav ->
-        BoxC("This is Box C", stackNav)
+    screens.forEach { (key, screenContent) ->
+        ScreenRegistry.screen(key, screenContent)
     }
 }
 
 @Composable
-fun BoxA(
-    title: String,
-    stackNav: SomersaultStackNavigation
-) {
+fun BoxA(title: String, stackNav: SomersaultStackNavigation) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -135,10 +124,7 @@ fun BoxB(title: String, stackNav: SomersaultStackNavigation) {
 }
 
 @Composable
-fun BoxC(
-    title: String,
-    stackNav: SomersaultStackNavigation
-) {
+fun BoxC(title: String, stackNav: SomersaultStackNavigation) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
