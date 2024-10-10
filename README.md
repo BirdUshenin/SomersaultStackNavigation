@@ -1,5 +1,5 @@
 
-# This is SomersaultStackNavigation
+# This is SomersaultStackNavigation 🏃
 
 This library is for using small graphs inside compose functions, it is compatible with the concept of UDF architecture
 
@@ -17,14 +17,13 @@ This library is for using small graphs inside compose functions, it is compatibl
 
 ```
 ```
- somersaultstacknavigation = "3.0.0"
+ somersaultstacknavigation = "3.0.1"
 ```
 
 #### Gradle
 ```
  dependencies {
-     implementation 'com.github.BirdUshenin:SomersaultStackNavigation:3.0.0'
-	}
+     implementation 'com.github.BirdUshenin:SomersaultStackNavigation:3.0.1'
  }    
 ```
 
