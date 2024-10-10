@@ -7,7 +7,7 @@ This library is for using small graphs inside compose functions, it is compatibl
 
 #### For Toml
 
-```http
+```
  dependencies {
      implementation(libs.somersaultstacknavigation)
  }    
