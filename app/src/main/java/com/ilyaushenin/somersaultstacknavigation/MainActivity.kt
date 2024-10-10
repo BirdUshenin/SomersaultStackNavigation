@@ -64,7 +64,7 @@ fun NavigationHandler() {
     }
 }
 
-@NavigationScreen
+@NavigationScreens
 fun registerScreens() {
     ScreenRegistry.screen("BoxA") { stackNav ->
         BoxA("This is Box A", stackNav)

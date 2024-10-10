@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "com.ilyaushenin.somersaultstacknavigation"
-        minSdk = 24
+        minSdk = 23
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -66,4 +66,6 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+//    implementation(libs.somersaultstacknavigation)
 }
