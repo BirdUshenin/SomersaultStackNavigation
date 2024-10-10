@@ -61,9 +61,9 @@ class SomersaultStackNavigation(initialState: String) {
 
 @Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class NavigationScreens
+annotation class NavigationRoute
 /***
- * Implement methods to store the state of screens, as well as their list.
+ * Create methods to store the state of screens, as well as their list.
 object ScreenRegistry {
 private val screens = mutableMapOf<String, @Composable (SomersaultStackNavigation) -> Unit>()
 
@@ -75,4 +75,22 @@ fun getScreen(key: String): (@Composable (SomersaultStackNavigation) -> Unit)? {
 return screens[key]
 }
 }
+
  ***/
+@Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class NavigationScreensGraph
+/***
+ * Create methods to your @Compose function
+fun registerScreens() {
+    val screens: List<Pair<String, @Composable (SomersaultStackNavigation) -> Unit>> = listOf(
+        "BoxA" to { stackNav -> BoxA("This is Box A", stackNav) },
+        "BoxB" to { stackNav -> BoxB("This is Box B", stackNav) },
+        "BoxC" to { stackNav -> BoxC("This is Box C", stackNav) }
+    )
+
+    screens.forEach { (key, screenContent) ->
+        ScreenRegistry.screen(key, screenContent)
+    }
+}
+***/
