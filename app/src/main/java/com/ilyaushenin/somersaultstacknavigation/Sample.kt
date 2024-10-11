@@ -9,7 +9,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import com.ilyaushenin.somersault.NavigationScreensGraph
 import com.ilyaushenin.somersault.SomersaultStackNavigation
-import com.ilyaushenin.somersaultstacknavigation.ui.theme.ScreenRegistry
 
 @Composable
 fun AppContent(

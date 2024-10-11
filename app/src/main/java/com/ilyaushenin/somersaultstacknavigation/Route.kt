@@ -1,4 +1,4 @@
-package com.ilyaushenin.somersaultstacknavigation.ui.theme
+package com.ilyaushenin.somersaultstacknavigation
 
 import androidx.compose.runtime.Composable
 import com.ilyaushenin.somersault.NavigationRoute
