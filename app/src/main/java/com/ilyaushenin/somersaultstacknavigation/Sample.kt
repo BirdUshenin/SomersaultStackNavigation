@@ -14,26 +14,19 @@ import com.ilyaushenin.somersault.SomersaultStackNavigation
 fun AppContent(
     statesModal: StatesModal
 ) {
-    /***
-     * Your state class with implementation SomersaultStackNavigation
-     ***/
+    // Your state class with implementation SomersaultStackNavigation
     val stackNav = remember { statesModal.somersaultStackNavigation }
 
-    /***
-     * You need register Navigation Graph in any main compose function
-     ***/
+    // You need to register a Navigation Graph in any main compose function
     registerScreens()
 
-    /***
-     * For correct using CompositionLocalProvider.
-     * In this CompositionLocalProvider you need declare LocalStackNav.
-     * Is necessary for support current n instance anywhere in the composition tree.
-     ***/
+    // This is done for the correct use of CompositionLocalProvider.
+    // In the CompositionLocalProvider you need to declare LocalStackNav.
+    // It is necessary to support current instance anywhere in the composition tree.
     CompositionLocalProvider(
         SomersaultStackNavigation.LocalStackNav provides stackNav
     ) {
-        /***
-         * @param NavigationHandler() pass in CompositionLocalProvider ***/
+        // Pass the NavigationHandler in CompositionLocalProvider
         NavigationHandler()
     }
 }
@@ -43,9 +36,7 @@ fun NavigationHandler() {
     val stackNav = SomersaultStackNavigation.LocalStackNav.current
     val currentStack by stackNav.navigationStack.collectAsState()
 
-    /***
-     * Hang the handler back
-     ***/
+    // Hang the handler back
     BackHandler(enabled = stackNav.canGoBack()) {
         stackNav.onBackFlip()
     }
@@ -59,9 +50,9 @@ fun NavigationHandler() {
     }
 }
 
-/***
- * This is Compose Navigation Graph
- ***/
+/**
+ * This is a Compose Navigation Graph
+ */
 @NavigationScreensGraph
 fun registerScreens() {
     val screens: List<Pair<String, @Composable (SomersaultStackNavigation) -> Unit>> = listOf(
