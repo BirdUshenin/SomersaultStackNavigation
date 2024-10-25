@@ -17,7 +17,7 @@ import com.ilyaushenin.somersault.SomersaultStackNavigation
 @Composable
 fun BoxA(
     title: String,
-    stackNav: SomersaultStackNavigation
+    stackNav: SomersaultStackNavigation<String>
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -44,7 +44,7 @@ fun BoxA(
 @Composable
 fun BoxB(
     title: String,
-    stackNav: SomersaultStackNavigation
+    stackNav: SomersaultStackNavigation<String>
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -67,7 +67,7 @@ fun BoxB(
 @Composable
 fun BoxC(
     title: String,
-    stackNav: SomersaultStackNavigation
+    stackNav: SomersaultStackNavigation<String>
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),

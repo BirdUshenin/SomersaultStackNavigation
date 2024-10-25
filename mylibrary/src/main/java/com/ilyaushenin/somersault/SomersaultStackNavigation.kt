@@ -4,32 +4,28 @@ import androidx.compose.runtime.compositionLocalOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class SomersaultStackNavigation(initialState: String) {
+class SomersaultStackNavigation<T>(initialState: T) {
 
     /**
      * Represents the navigation stack.
-     * It stores a list of states (screens) as a [MutableStateFlow],
-     * which allows tracking stack changes in a reactive manner
+     * Stores a list of states (screens) as a [MutableStateFlow],
+     * allowing tracking stack changes in a reactive manner
      * and automatically updating the UI when changes occur.
      */
-    val navigationStack: StateFlow<List<String>> get() = _navigationStack
+    val navigationStack: StateFlow<List<T>> get() = _navigationStack
     private val _navigationStack = MutableStateFlow(listOf(initialState))
 
     /**
-     * Navigates forward through the app's screens.
-     * It can be used to navigate to a new screen in the application by adding the corresponding
-     * state to the navigation stack.
+     * Navigates forward by adding a new state to the stack.
      */
-    fun onForwardFlip(state: String) {
+    fun onForwardFlip(state: T) {
         _navigationStack.value += state
     }
 
     /**
-     * Navigates back through the app's screens.
-     * It can be used to navigate back in the application and update the UI according to
-     * the current state of the navigation stack.
+     * Navigates back by removing the last state from the stack.
      */
-    fun onBackFlip(): String? {
+    fun onBackFlip(): T? {
         if (_navigationStack.value.size > 1) {
             _navigationStack.value = _navigationStack.value.dropLast(1)
         }
@@ -37,26 +33,25 @@ class SomersaultStackNavigation(initialState: String) {
     }
 
     /**
-     * Get the current state in the navigation stack.
-     * It can be used to get the current state and display it on the screen.
+     * Gets the current state in the navigation stack.
      */
-    private fun currentState(): String? = _navigationStack.value.lastOrNull()
-
+    private fun currentState(): T? = _navigationStack.value.lastOrNull()
 
     companion object {
         /**
-         * Provides access to [SomersaultStackNavigation] instance anywhere in the composition tree.
+         * Provides access to a [SomersaultStackNavigation] instance anywhere in the composition tree.
          */
-        val LocalStackNav = compositionLocalOf<SomersaultStackNavigation> {
+        val LocalStackNav = compositionLocalOf<SomersaultStackNavigation<*>> {
             error("StackNav not provided")
         }
     }
 
     /**
-     * Determines whether it is possible to go back to the previous screen.
+     * Determines whether it is possible to go back to the previous state.
      */
     fun canGoBack(): Boolean = _navigationStack.value.size > 1
 }
+
 
 @Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)

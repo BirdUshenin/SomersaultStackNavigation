@@ -18,7 +18,7 @@ fun AppContent(
     val stackNav = remember { statesModal.somersaultStackNavigation }
 
     // You need to register a Navigation Graph in any main compose function
-    registerScreens()
+    RegisterScreens()
 
     // This is done for the correct use of CompositionLocalProvider.
     // In the CompositionLocalProvider you need to declare LocalStackNav.
@@ -27,13 +27,14 @@ fun AppContent(
         SomersaultStackNavigation.LocalStackNav provides stackNav
     ) {
         // Pass the NavigationHandler in CompositionLocalProvider
-        NavigationHandler()
+        NavigationHandler(stackNav)
     }
 }
 
 @Composable
-fun NavigationHandler() {
-    val stackNav = SomersaultStackNavigation.LocalStackNav.current
+fun NavigationHandler(
+    stackNav: SomersaultStackNavigation<String>
+) {
     val currentStack by stackNav.navigationStack.collectAsState()
 
     // Hang the handler back
@@ -44,7 +45,7 @@ fun NavigationHandler() {
     val currentScreenKey = currentStack.lastOrNull()
     currentScreenKey?.let { key ->
         val screenContent = ScreenRegistry.getScreen(key)
-        screenContent?.invoke(stackNav) ?: Text("Error screen not fount.")
+        screenContent?.invoke(stackNav) ?: Text("Error: screen not found.")
     } ?: run {
         Text("Backstack is clear.")
     }
@@ -53,9 +54,11 @@ fun NavigationHandler() {
 /**
  * This is a Compose Navigation Graph
  */
+@Composable
 @NavigationScreensGraph
-fun registerScreens() {
-    val screens: List<Pair<String, @Composable (SomersaultStackNavigation) -> Unit>> = listOf(
+fun RegisterScreens() {
+    val screens: List<Pair<String, @Composable (SomersaultStackNavigation<String>) -> Unit>>
+    = listOf(
         "BoxA" to { stackNav -> BoxA("This is Box A", stackNav) },
         "BoxB" to { stackNav -> BoxB("This is Box B", stackNav) },
         "BoxC" to { stackNav -> BoxC("This is Box C", stackNav) }
