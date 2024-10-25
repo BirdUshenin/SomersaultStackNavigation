@@ -18,22 +18,21 @@ fun AppContent(
     val stackNav = remember { statesModal.somersaultStackNavigation }
 
     // You need to register a Navigation Graph in any main compose function
-    registerScreens()
+    RegisterScreens()
 
     // This is done for the correct use of CompositionLocalProvider.
     // In the CompositionLocalProvider you need to declare LocalStackNav.
     // It is necessary to support current instance anywhere in the composition tree.
-    CompositionLocalProvider(
-        SomersaultStackNavigation.LocalStackNav provides stackNav
-    ) {
-        // Pass the NavigationHandler in CompositionLocalProvider
+    CompositionLocalProvider(SomersaultStackNavigation.LocalStackNav provides stackNav) {
+        // Pass the NavigationHandler in CompositionProvider
         NavigationHandler()
     }
 }
 
 @Composable
 fun NavigationHandler() {
-    val stackNav = SomersaultStackNavigation.LocalStackNav.current
+    val stackNavCurrent = SomersaultStackNavigation.LocalStackNav.current
+    val stackNav = SomersaultStackNavigation.getNavigation<String>(stackNavCurrent)
     val currentStack by stackNav.navigationStack.collectAsState()
 
     // Hang the handler back
@@ -44,7 +43,7 @@ fun NavigationHandler() {
     val currentScreenKey = currentStack.lastOrNull()
     currentScreenKey?.let { key ->
         val screenContent = ScreenRegistry.getScreen(key)
-        screenContent?.invoke(stackNav) ?: Text("Error screen not fount.")
+        screenContent?.invoke(stackNav) ?: Text("Error screen not found.")
     } ?: run {
         Text("Backstack is clear.")
     }
@@ -54,8 +53,10 @@ fun NavigationHandler() {
  * This is a Compose Navigation Graph
  */
 @NavigationScreensGraph
-fun registerScreens() {
-    val screens: List<Pair<String, @Composable (SomersaultStackNavigation) -> Unit>> = listOf(
+@Composable
+fun RegisterScreens() {
+    val screens: List<Pair<String, @Composable (SomersaultStackNavigation<String>) -> Unit>>
+    = listOf(
         "BoxA" to { stackNav -> BoxA("This is Box A", stackNav) },
         "BoxB" to { stackNav -> BoxB("This is Box B", stackNav) },
         "BoxC" to { stackNav -> BoxC("This is Box C", stackNav) }

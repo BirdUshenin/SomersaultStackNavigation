@@ -67,6 +67,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    // implementation SomersaultStackNavigation
-    implementation(libs.somersaultstacknavigation)
+    implementation(project(":mylibrary"))
+//    implementation(libs.somersaultstacknavigation)
 }
