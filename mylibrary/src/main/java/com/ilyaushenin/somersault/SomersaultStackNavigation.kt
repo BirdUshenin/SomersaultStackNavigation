@@ -49,7 +49,6 @@ class SomersaultStackNavigation<T>(initialState: T) {
         val LocalStackNav = compositionLocalOf<SomersaultStackNavigation<*>> {
             error("StackNav not provided")
         }
-        @Suppress("UNCHECKED_CAST")
         inline fun <reified T> getNavigation(stackNav: SomersaultStackNavigation<*>)
                 : SomersaultStackNavigation<T> {
             return stackNav as? SomersaultStackNavigation<T>
