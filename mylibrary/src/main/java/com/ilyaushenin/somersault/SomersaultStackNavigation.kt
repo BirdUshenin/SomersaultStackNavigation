@@ -1,5 +1,6 @@
 package com.ilyaushenin.somersault
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.compositionLocalOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -62,27 +63,23 @@ class SomersaultStackNavigation<T>(initialState: T) {
     fun canGoBack(): Boolean = _navigationStack.value.size > 1
 }
 
-@Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION)
-@Retention(AnnotationRetention.RUNTIME)
-annotation class NavigationRoute
+object ScreenRegistry {
+    /**
+     * These methods are responsible for registering your screens that you will create.
+     */
+    private val screens = mutableMapOf<String, @Composable (
+        SomersaultStackNavigation<String>
+    ) -> Unit>()
 
-/**
- * Create methods to store the state of screens, as well as their list.
- *
- * ```
- * object ScreenRegistry {
- *     private val screens = mutableMapOf<String, @Composable (SomersaultStackNavigation<T>) -> Unit>()
- *
- *     fun screen(key: String, content: @Composable (SomersaultStackNavigation<T>) -> Unit) {
- *         screens[key] = content
- *     }
- *
- *     fun getScreen(key: String): (@Composable (SomersaultStackNavigation<T>) -> Unit)? {
- *         return screens[key]
- *     }
- * }
- * ```
- */
+    fun screen(key: String, content: @Composable (SomersaultStackNavigation<String>) -> Unit) {
+        screens[key] = content
+    }
+
+    fun getScreen(key: String): (@Composable (SomersaultStackNavigation<String>) -> Unit)? {
+        return screens[key]
+    }
+}
+
 @Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class NavigationScreensGraph
