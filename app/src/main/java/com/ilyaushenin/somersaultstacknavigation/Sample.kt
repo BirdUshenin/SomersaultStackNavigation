@@ -4,7 +4,6 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -17,7 +16,6 @@ fun AppContent(
 ) {
     // Your state class with implementation SomersaultStackNavigation
     val stackNav = remember { statesModal.somersaultStackNavigation }
-    val localStackNav = SomersaultStackNavigation.provideCompositionLocal<String>()
 
     // You need to register a Navigation Graph in any main compose function
     RegisterScreens()
@@ -25,16 +23,16 @@ fun AppContent(
     // This is done for the correct use of CompositionLocalProvider.
     // In the CompositionLocalProvider you need to declare LocalStackNav.
     // It is necessary to support current instance anywhere in the composition tree.
-    CompositionLocalProvider(localStackNav provides stackNav) {
-        NavigationHandler(localStackNav)
+    CompositionLocalProvider(SomersaultStackNavigation.LocalStackNav provides stackNav) {
+        // Pass the NavigationHandler in CompositionProvider
+        NavigationHandler()
     }
 }
 
 @Composable
-fun NavigationHandler(
-    localStackNav: ProvidableCompositionLocal<SomersaultStackNavigation<String>>
-) {
-    val stackNav = localStackNav.current
+fun NavigationHandler() {
+    val stackNavCurrent = SomersaultStackNavigation.LocalStackNav.current
+    val stackNav = SomersaultStackNavigation.getNavigation<String>(stackNavCurrent)
     val currentStack by stackNav.navigationStack.collectAsState()
 
     // Hang the handler back

@@ -1,6 +1,5 @@
 package com.ilyaushenin.somersault
 
-import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.compositionLocalOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -47,8 +46,15 @@ class SomersaultStackNavigation<T>(initialState: T) {
         /**
          * Provides access to [SomersaultStackNavigation] instance anywhere in the composition tree.
          */
-        fun <T> provideCompositionLocal(): ProvidableCompositionLocal<SomersaultStackNavigation<T>>
-        = compositionLocalOf { error("StackNav not provided") }
+        val LocalStackNav = compositionLocalOf<SomersaultStackNavigation<*>> {
+            error("StackNav not provided")
+        }
+        @Suppress("UNCHECKED_CAST")
+        inline fun <reified T> getNavigation(stackNav: SomersaultStackNavigation<*>)
+                : SomersaultStackNavigation<T> {
+            return stackNav as? SomersaultStackNavigation<T>
+                ?: error("Expected SomersaultStackNavigation<${T::class.java}> but found different type")
+        }
     }
 
     /**
