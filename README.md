@@ -17,13 +17,13 @@ This library is for using small graphs inside compose functions, it is compatibl
 
 ```
 ```
- somersaultstacknavigation = "3.0.1"
+ somersaultstacknavigation = "3.0.3"
 ```
 
 #### Gradle
 ```
  dependencies {
-     implementation 'com.github.BirdUshenin:SomersaultStackNavigation:3.0.1'
+     implementation 'com.github.BirdUshenin:SomersaultStackNavigation:3.0.3'
  }    
 ```
 
