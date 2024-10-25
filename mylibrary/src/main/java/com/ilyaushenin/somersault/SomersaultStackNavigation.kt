@@ -1,10 +1,11 @@
 package com.ilyaushenin.somersault
 
+import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.compositionLocalOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class SomersaultStackNavigation(initialState: String) {
+class SomersaultStackNavigation<T>(initialState: T) {
 
     /**
      * Represents the navigation stack.
@@ -12,7 +13,7 @@ class SomersaultStackNavigation(initialState: String) {
      * which allows tracking stack changes in a reactive manner
      * and automatically updating the UI when changes occur.
      */
-    val navigationStack: StateFlow<List<String>> get() = _navigationStack
+    val navigationStack: StateFlow<List<T>> get() = _navigationStack
     private val _navigationStack = MutableStateFlow(listOf(initialState))
 
     /**
@@ -20,7 +21,7 @@ class SomersaultStackNavigation(initialState: String) {
      * It can be used to navigate to a new screen in the application by adding the corresponding
      * state to the navigation stack.
      */
-    fun onForwardFlip(state: String) {
+    fun onForwardFlip(state: T) {
         _navigationStack.value += state
     }
 
@@ -29,7 +30,7 @@ class SomersaultStackNavigation(initialState: String) {
      * It can be used to navigate back in the application and update the UI according to
      * the current state of the navigation stack.
      */
-    fun onBackFlip(): String? {
+    fun onBackFlip(): T? {
         if (_navigationStack.value.size > 1) {
             _navigationStack.value = _navigationStack.value.dropLast(1)
         }
@@ -40,16 +41,14 @@ class SomersaultStackNavigation(initialState: String) {
      * Get the current state in the navigation stack.
      * It can be used to get the current state and display it on the screen.
      */
-    private fun currentState(): String? = _navigationStack.value.lastOrNull()
-
+    private fun currentState(): T? = _navigationStack.value.lastOrNull()
 
     companion object {
         /**
          * Provides access to [SomersaultStackNavigation] instance anywhere in the composition tree.
          */
-        val LocalStackNav = compositionLocalOf<SomersaultStackNavigation> {
-            error("StackNav not provided")
-        }
+        fun <T> provideCompositionLocal(): ProvidableCompositionLocal<SomersaultStackNavigation<T>>
+        = compositionLocalOf { error("StackNav not provided") }
     }
 
     /**
@@ -67,13 +66,13 @@ annotation class NavigationRoute
  *
  * ```
  * object ScreenRegistry {
- *     private val screens = mutableMapOf<String, @Composable (SomersaultStackNavigation) -> Unit>()
+ *     private val screens = mutableMapOf<String, @Composable (SomersaultStackNavigation<T>) -> Unit>()
  *
- *     fun screen(key: String, content: @Composable (SomersaultStackNavigation) -> Unit) {
+ *     fun screen(key: String, content: @Composable (SomersaultStackNavigation<T>) -> Unit) {
  *         screens[key] = content
  *     }
  *
- *     fun getScreen(key: String): (@Composable (SomersaultStackNavigation) -> Unit)? {
+ *     fun getScreen(key: String): (@Composable (SomersaultStackNavigation<T>) -> Unit)? {
  *         return screens[key]
  *     }
  * }
@@ -87,7 +86,7 @@ annotation class NavigationScreensGraph
  *
  * ```
  * fun registerScreens() {
- *     val screens: List<Pair<String, @Composable (SomersaultStackNavigation) -> Unit>> = listOf(
+ *     val screens: List<Pair<String, @Composable (SomersaultStackNavigation<T>) -> Unit>> = listOf(
  *         "BoxA" to { stackNav -> BoxA("This is Box A", stackNav) },
  *         "BoxB" to { stackNav -> BoxB("This is Box B", stackNav) },
  *         "BoxC" to { stackNav -> BoxC("This is Box C", stackNav) }
