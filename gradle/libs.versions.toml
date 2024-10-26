@@ -10,8 +10,9 @@ activityCompose = "1.9.2"
 composeBom = "2024.04.01"
 appcompat = "1.7.0"
 material = "1.12.0"
+
 # Version SomersaultStackNavigation
-somersaultstacknavigation = "3.0.1"
+somersaultstacknavigation = "3.0.3"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }

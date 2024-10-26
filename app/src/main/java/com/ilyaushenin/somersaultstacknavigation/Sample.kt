@@ -58,9 +58,10 @@ fun NavigationHandler() {
 fun RegisterScreens() {
     val screens: List<Pair<String, @Composable (SomersaultStackNavigation<String>) -> Unit>>
     = listOf(
-        "BoxA" to { stackNav -> BoxA("This is Box A", stackNav) },
-        "BoxB" to { stackNav -> BoxB("This is Box B", stackNav) },
-        "BoxC" to { stackNav -> BoxC("This is Box C", stackNav) }
+        "ParkingPlace" to { stackNav -> ParkingPlace("This is Parking", stackNav) },
+        "BlockA" to { stackNav -> BlockA("This is Block A", stackNav) },
+        "BlockB" to { stackNav -> BlockB("This is Block B", stackNav) },
+        "BlockC" to { stackNav -> BlockC("This is Block C", stackNav) }
     )
 
     screens.forEach { (key, screenContent) ->
