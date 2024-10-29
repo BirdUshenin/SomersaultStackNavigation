@@ -26,8 +26,7 @@ fun GradientButton(
             Color(0xFFD000FF),
             Color(0xFFAB22D4),
             Color(0xFF7024FF),
-
-            )
+        )
     )
 
     Box(
