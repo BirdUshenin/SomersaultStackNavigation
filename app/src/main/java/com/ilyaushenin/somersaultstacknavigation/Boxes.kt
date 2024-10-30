@@ -95,8 +95,8 @@ fun BlockB(
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(onClick = {
-            stackNav.onForwardFlip("BlockC")
-        }) { Text("Go to Block C") }
+            stackNav.onForwardFlip("ParkingPlace")
+        }) { Text("Go to ParkingPlace") }
 
         Button(onClick = {
             stackNav.onBackFlip()

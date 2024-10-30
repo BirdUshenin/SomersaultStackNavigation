@@ -5,5 +5,5 @@ import com.ilyaushenin.somersault.SomersaultStackNavigation
 data class StatesModal(
     /** Init SomersaultStackNavigation in your UDF state class */
     val somersaultStackNavigation: SomersaultStackNavigation<String>
-    = SomersaultStackNavigation("ParkingPlace")
+    = SomersaultStackNavigation("BlockB")
 )
