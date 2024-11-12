@@ -20,9 +20,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
+import androidx.compose.ui.unit.Dp
 
 class SomersaultStackNavigation<T>(initialState: T) {
 
@@ -148,17 +150,18 @@ fun RegisterScreens(
 @Composable
 fun SomersaultBottomNavigation(
     stackNav: SomersaultStackNavigation<String>,
+    backgroundShape: Dp,
     screens: List<ScreenItem>,
     colorEnabled: Color? = null,
     colorDisabled: Color? = null,
     backgroundInFocus: Color? = null,
     backgroundOutFocus: Color? = null,
     iconColorEnabled: Color? = null,
-    iconColorDisabled: Color? = null
+    iconColorDisabled: Color? = null,
 ) {
-    val currentStack by stackNav.navigationStack.collectAsState()
     val lastKnownScreen = remember { mutableStateOf<String?>(null) }
 
+    val currentStack by stackNav.navigationStack.collectAsState()
     val currentScreen =
         currentStack.lastOrNull()?.takeIf { screen -> screens.any { it.key == screen } }
             ?: lastKnownScreen.value
@@ -183,7 +186,8 @@ fun SomersaultBottomNavigation(
                 backgroundInFocus = backgroundInFocus,
                 backgroundOutFocus = backgroundOutFocus,
                 iconColorEnabled = iconColorEnabled,
-                iconColorDisabled = iconColorDisabled
+                iconColorDisabled = iconColorDisabled,
+                backgroundShape = backgroundShape,
             )
         }
     }
@@ -191,16 +195,17 @@ fun SomersaultBottomNavigation(
 
 @Composable
 fun BottomNavButton(
+    stackNav: SomersaultStackNavigation<String>,
+    backgroundShape: Dp,
     screen: ScreenItem,
     currentScreen: String?,
-    stackNav: SomersaultStackNavigation<String>,
     onScreenSelected: ((String) -> Unit)? = null,
     colorEnabled: Color? = null,
     colorDisabled: Color? = null,
     backgroundInFocus: Color? = null,
     backgroundOutFocus: Color? = null,
     iconColorEnabled: Color? = null,
-    iconColorDisabled: Color? = null
+    iconColorDisabled: Color? = null,
 ) {
     val isSelected = screen.key == currentScreen
 
@@ -214,7 +219,8 @@ fun BottomNavButton(
             } else {
                 backgroundOutFocus ?: Color.Transparent
             }
-        )
+        ),
+        shape = RoundedCornerShape(backgroundShape)
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             screen.icon(

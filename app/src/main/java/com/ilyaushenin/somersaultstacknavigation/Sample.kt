@@ -60,6 +60,7 @@ fun AppContent(
         }
         SomersaultBottomNavigation(
             stackNav = stackNav,
+            backgroundShape = 25.dp,
             screens = listOf(
                 ScreenItem(
                     key = "BlockA",
@@ -81,8 +82,8 @@ fun AppContent(
                             tint = it
                         )
                     },
-                )
-            ),
+                ),
+            )
         )
     }
 }
