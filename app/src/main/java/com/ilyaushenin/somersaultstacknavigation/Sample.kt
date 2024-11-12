@@ -22,7 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -61,16 +60,30 @@ fun AppContent(
         SomersaultBottomNavigation(
             stackNav = stackNav,
             backgroundShape = 25.dp,
+            iconColorEnabled = Color.White,
+            iconColorDisabled = Color.Black,
             screens = listOf(
                 ScreenItem(
                     key = "BlockA",
                     label = "Block A",
-                    icon = { Icon(Icons.Default.Home, contentDescription = "Block A") }
+                    icon = {
+                        Icon(
+                            Icons.Default.Home,
+                            contentDescription = "Block A",
+                            tint = it
+                        )
+                    }
                 ),
                 ScreenItem(
                     key = "BlockB",
                     label = "Block B",
-                    icon = { Icon(Icons.Default.Star, contentDescription = "Block B") }
+                    icon = {
+                        Icon(
+                            Icons.Default.Star,
+                            contentDescription = "Block B",
+                            tint = it
+                        )
+                    }
                 ),
                 ScreenItem(
                     key = "BlockC",
@@ -87,170 +100,6 @@ fun AppContent(
         )
     }
 }
-
-
-
-
-//@Composable
-//fun BottomNavigation(
-//    stackNav: SomersaultStackNavigation<String>,
-//    screens: List<Pair<String, String>>
-//) {
-//    val currentStack by stackNav.navigationStack.collectAsState()
-//    val lastKnownScreen = remember { mutableStateOf<String?>(null) }
-//
-//    val currentScreen = currentStack.lastOrNull()?.takeIf { screen -> screens.any { it.first == screen } }
-//        ?: lastKnownScreen.value
-//
-//    if (screens.any { it.first == currentScreen }) {
-//        lastKnownScreen.value = currentScreen
-//    }
-//
-//    Row(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .padding(12.dp),
-//        horizontalArrangement = Arrangement.SpaceBetween
-//    ) {
-//        screens.forEach { (screenKey, label) ->
-//            BottomNavButton(
-//                screenKey = screenKey,
-//                label = label,
-//                currentScreen = currentScreen,
-//                stackNav = stackNav
-//            )
-//        }
-//    }
-//}
-//
-//@Composable
-//fun BottomNavButton(
-//    screenKey: String,
-//    label: String,
-//    currentScreen: String?,
-//    stackNav: SomersaultStackNavigation<String>,
-//    onScreenSelected: ((String) -> Unit)? = null
-//) {
-//    val isSelected = screenKey == currentScreen
-//
-//    Button(
-//        onClick = {
-//            onScreenSelected?.invoke(screenKey) ?: stackNav.onForwardFlipPoint(screenKey)
-//        },
-//        colors = ButtonDefaults.buttonColors(
-//            if (isSelected) Color(0xFF00AAC0) else Color.Transparent
-//        )
-//    ) {
-//        Text(
-//            text = label,
-//            color = if (isSelected) Color(0xFFFFFFFF) else Color(0xFF000000)
-//        )
-//    }
-//}
-
-
-
-
-//@Composable
-//fun BottomNavigation(
-//    stackNav: SomersaultStackNavigation<String>
-//) {
-//    val currentStack by stackNav.navigationStack.collectAsState()
-//    val knownScreens = listOf("BlockA", "BlockB", "BlockC")
-//    val lastKnownScreen = remember { mutableStateOf<String?>(null) }
-//
-//    val currentScreen = currentStack.lastOrNull()?.takeIf { it in knownScreens } ?: lastKnownScreen.value
-//
-//    if (currentScreen in knownScreens) {
-//        lastKnownScreen.value = currentScreen
-//    }
-//
-//    Row(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .padding(12.dp),
-//        horizontalArrangement = Arrangement.SpaceBetween
-//    ) {
-//        BottomNavButton(
-//            "BlockA",
-//            currentScreen = currentScreen,
-//            stackNav = stackNav
-//        )
-//        BottomNavButton(
-//            "BlockB",
-//            currentScreen = currentScreen,
-//            stackNav = stackNav
-//        )
-//        BottomNavButton(
-//            "BlockC",
-//            currentScreen = currentScreen,
-//            stackNav = stackNav
-//        )
-//    }
-//}
-//
-//@Composable
-//fun BottomNavButton(
-//    screenKey: String,
-//
-//    currentScreen: String?,
-//    stackNav: SomersaultStackNavigation<String>
-//) {
-//    val isSelected = screenKey == currentScreen
-//
-//    Button(
-//        onClick = { stackNav.onForwardFlipPoint(screenKey) },
-//        colors = ButtonDefaults.buttonColors(
-//            if (isSelected) Color(0xFF00AAC0) else Color.Transparent
-//        )
-//    ) {
-//        Text(
-//            text = screenKey,
-//            color = if (isSelected) Color(0xFFFFFFFF) else Color(0xFF000000)
-//        )
-//    }
-//}
-
-
-
-
-//@Composable
-//fun BottomNavigation(
-//    stackNav: SomersaultStackNavigation<String>
-//) {
-//    val currentScreen by stackNav.navigationStack.collectAsState()
-//
-//    Row(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .padding(12.dp),
-//        horizontalArrangement = Arrangement.SpaceBetween
-//    ) {
-//        BottomNavButton("BlockA", currentScreen.lastOrNull(), stackNav)
-//        BottomNavButton("BlockB", currentScreen.lastOrNull(), stackNav)
-//        BottomNavButton("BlockC", currentScreen.lastOrNull(), stackNav)
-//    }
-//}
-//
-//@Composable
-//fun BottomNavButton(
-//    screenKey: String,
-//    currentScreen: String?,
-//    stackNav: SomersaultStackNavigation<String>
-//) {
-//    val isSelected = screenKey == currentScreen
-//    Button(
-//        onClick = { stackNav.onForwardFlipPoint(screenKey) },
-//        colors = ButtonDefaults.buttonColors(
-//            if (isSelected) Color(0xFF00AAC0) else Color.Transparent
-//        )
-//    ) {
-//        Text(
-//            text = screenKey,
-//            color = if (isSelected) Color(0xFFFFFFFF) else Color(0xFF000000)
-//        )
-//    }
-//}
 
 @Composable
 fun NavigationHandler() {
